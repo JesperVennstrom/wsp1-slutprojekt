@@ -3,11 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projekt #2</title>
-    <link rel="stylesheet" type="text/css" href="/style.css?<%=Time.now.to_i%>">
+    <title>Casino of Hell</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
 </head>
 <body>
-  <h1>Webbserverprogrammering 1 - Projekt 3 - mall</h1>
-  <img src="/img/glhf.png">
+    <header>
+        <h1>Casino of Hell</h1>
+        <div>
+            <div class="account-tab">Account</div>
+            <div class="deposit-tab" onclick="showPopup()">Deposit</div>
+        </div>
+    </header>
+    <main>
+        <div class="slot-machine">
+            <div class="slot-container">
+                <div class="tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile" class="win_tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile" class="win_tile"><image src="img/GHOST_ICON.png"></div>
+                <div class="tile" class="win_tile"><image src="img/DEMON_ICON.png"></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></div>
+            </div>
+
+            <div class="slot-container">
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile" class="win_tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile" class="win_tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile" class="win_tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+            </div>
+
+            <div class="slot-container">
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile" class="win_tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile" class="win_tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile" class="win_tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+            </div>
+
+            <div class="slot-container">
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile" class="win_tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile" class="win_tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile" class="win_tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+            </div>
+
+            <div class="slot-container">
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+                <div class="tile"><image src="img/WILD_ICON.png"></image></div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab">Balance</div>
+            <div class="tab">Input</div>
+            <div class="tab">
+            <h6> Win Amount: </h6>
+            <p id="win_amount"> </p> 
+            </div>
+            <% @stat_list = [] %>
+            <% @stats.each do |stat| %>
+                <% @stat_list.append(stat["value"])%>
+                <% p(@stat_list) %>
+            <% end %>
+            <div id="spin" onclick="randomizer(<%= @stat_list %>)"> Spin </div>
+        </div>
+    </main>
+
+    <div class="overlay" id="overlay" onclick="hidePopup()"></div>
+    <div class="popup" id="popup">
+        <h2>Deposit Money</h2>
+        <input type="number" placeholder="Enter amount" id="depositAmount">
+        <button onclick="depositMoney()">Deposit</button>
+        <button onclick="hidePopup()">Close</button>
+    </div>
+    <script src="script.js?<%= Time.now %>"></script>
 </body>
 </html>

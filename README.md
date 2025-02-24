@@ -59,7 +59,7 @@ A-F [enligt beskrivning](https://github.com/ntijoh/WTF24/blob/main/Bed%C3%B6mnin
 | 6   	  | Arbete                              	      |
 | 7     	| Lov                                 	      |
 | 8     	| Arbete                                 	    |
-| 9     	| Arbete: Börja markera bedömningshandledning |
+| 9     	| Arbete                                 	    |
 | 10     	| Arbete                                 	    |
 | 11     	| Arbete                                 	    |
 | 12     	| Arbete                                 	    |
