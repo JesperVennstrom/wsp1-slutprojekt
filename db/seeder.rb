@@ -1,4 +1,5 @@
 require 'sqlite3'
+require 'bcrypt'
 
 class Seeder
 
@@ -29,8 +30,10 @@ class Seeder
     )')
   end
   def self.populate_tables 
-    db.execute('INSERT INTO users (username, password, balance) VALUES ("admin", "admin", 1000)')
-    db.execute('INSERT INTO users (username, password, balance) VALUES ("user", "user", 1000)')
+    bcrypt_password = BCrypt::Password.create('admin')
+    db.execute('INSERT INTO users (username, password, balance) VALUES ("admin", ?, 1000)', [bcrypt_password])
+    bcrypt_password1 = BCrypt::Password.create('user')
+    db.execute('INSERT INTO users (username, password, balance) VALUES ("user", ?, 1000)', [bcrypt_password1])
 
     db.execute('INSERT INTO stats (name, value) VALUES ("apple", 250)')
     db.execute('INSERT INTO stats (name, value) VALUES ("grape", 450)')
