@@ -2,6 +2,8 @@ require 'sinatra'
 require 'securerandom'
 require 'bcrypt'
 require 'rack-flash'
+require 'sinatra/activerecord'
+require 'json'
 
 class App < Sinatra::Base
 
@@ -50,5 +52,34 @@ class App < Sinatra::Base
         end
         redirect('/login')
     end
+    get '/register' do
+        erb(:register)
+    end
+    post '/register' do
+        users = db.execute('SELECT * FROM users WHERE username = ?', [params[:username]])
+        if users.empty?
+            password = BCrypt::Password.create(params[:password])
+            db.execute('INSERT INTO users (username, password, balance) VALUES (?, ?, 1000)', [params[:username], password])
+            redirect('/login')
+        else
+            redirect('/register')
+        end
+    end
+    post '/logout' do
+        session[:user] = nil
+        redirect('/login')
+    end
 
+end
+put '/updateBalance' do
+    content_type :json
+    p("hello")
+    user = User.find_by(id: params[:id]) #??
+    if user 
+        request_payload = JSON.parse(request.body.read)
+        user.update(balance: request_payload["balance"])
+        { success: true, message: "Balance updated", user: user }.to_json
+    else
+        { success: false, message: "User not found" }.to_json
+    end
 end

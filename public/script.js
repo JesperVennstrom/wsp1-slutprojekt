@@ -19,7 +19,7 @@ function depositMoney() {
     }
 }
 
-function randomizer(stats) {
+function randomizer(stats, userID, balance) {
     let  max = 1000;
     const tiles = document.getElementsByClassName("tile");
     const parent = document.getElementsByClassName("slot-machine");
@@ -82,9 +82,10 @@ function randomizer(stats) {
         delay += 400;
 
     }
-    win();
+    win(userID, balance);
+    UpdateBalance(userID, balance);
 }
-function win() {
+function win(userID, balance) {
     const containers = document.getElementsByClassName("slot-container");
     let win = 0;
     let win_array1 = [];
@@ -174,10 +175,31 @@ function win() {
                         win += 300;
                     }
                 }
+                balance += win;
             }
     }
     console.log(win);
     setTimeout (() => {
         document.getElementById("win_amount").innerHTML = `$${win}`;
     }, 4700);
+}
+function UpdateBalance(userID, newBalance) {
+    console.log("Updating balance:", newBalance);
+    fetch(`http://localhost:9292/updateBalance`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ balance: newBalance })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log(data);
+                document.getElementById('balance').innerHTML = `Balance: $${data.balance}`;
+            } else {
+                console.error("Error updating balance:", data.message);
+            }
+        });
+
 }

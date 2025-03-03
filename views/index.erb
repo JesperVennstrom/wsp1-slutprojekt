@@ -123,7 +123,7 @@
                 <% @stat_list.append(stat["value"])%>
                 <% p(@stat_list) %>
             <% end %>
-            <div id="spin" onclick="randomizer(<%= @stat_list %>)"> Spin </div>
+            <div id="spin" onclick="randomizer(<%= @stat_list %>, <%= session[:user]["id"] %> ,<%= session[:user]["balance"] %> )"> Spin </div>
         </div>
     </main>
 
