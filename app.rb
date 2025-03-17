@@ -65,21 +65,22 @@ class App < Sinatra::Base
             redirect('/register')
         end
     end
-    post '/logout' do
+    get '/logout' do
         session[:user] = nil
         redirect('/login')
     end
-
-end
-put '/updateBalance' do
-    content_type :json
-    p("hello")
-    user = User.find_by(id: params[:id]) #??
-    if user 
-        request_payload = JSON.parse(request.body.read)
-        user.update(balance: request_payload["balance"])
-        { success: true, message: "Balance updated", user: user }.to_json
-    else
-        { success: false, message: "User not found" }.to_json
+    post '/updatebalance' do
+        content_type :json
+      
+        request_payload = JSON.parse(request.body.read) # Read the JSON request body
+        user = db.execute('SELECT * FROM users WHERE id = ?', [session[:user]["id"]]).first
+        balance = user['balance'] + request_payload["win"] - request_payload["bet"]
+        if user
+            db.execute('UPDATE users SET balance = ? WHERE id = ?', [balance, session[:user]["id"]])
+          { success: true, message: "Balance updated", balance: balance }.to_json
+        else
+          { success: false, message: "User not found" }.to_json
+        end
     end
 end
+  

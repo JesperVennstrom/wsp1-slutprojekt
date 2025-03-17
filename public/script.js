@@ -18,8 +18,32 @@ function depositMoney() {
         alert('Please enter a valid amount.');
     }
 }
+function updateSlider(odd, id) {
+    if (id == 1) {
+        document.getElementById("odd1").innerHTML = odd;
+    } else if (id == 2) {
+        document.getElementById("odd2").innerHTML = odd;
+    } else if (id == 3) {
+        document.getElementById("odd3").innerHTML = odd;
+    } else if (id == 4) {
+        document.getElementById("odd4").innerHTML = odd;
+    } else if (id == 5) {
+        document.getElementById("odd5").innerHTML = odd;
+    } else if (id == 6) {
+        document.getElementById("odd6").innerHTML = odd;
+    } 
+    value1 = document.getElementById("odd1").innerHTML;
+    value2 = document.getElementById("odd2").innerHTML;
+    value3 = document.getElementById("odd3").innerHTML;
+    value4 = document.getElementById("odd4").innerHTML;
+    value5 = document.getElementById("odd5").innerHTML;
+    value6 = document.getElementById("odd6").innerHTML;
+    wild_value = document.getElementById("wild").innerHTML;
+    console.log(value1, value2, value3, value4, value5, value6, wild_value);
+    wild_value = 1000 - parseInt(value1) - parseInt(value2) - parseInt(value3) - parseInt(value4) - parseInt(value5) - parseInt(value6); 
+}
 
-function randomizer(stats, userID, balance) {
+function randomizer(stats) {
     let  max = 1000;
     const tiles = document.getElementsByClassName("tile");
     const parent = document.getElementsByClassName("slot-machine");
@@ -82,10 +106,10 @@ function randomizer(stats, userID, balance) {
         delay += 400;
 
     }
-    win(userID, balance);
-    UpdateBalance(userID, balance);
+    win_amount = win();
+    UpdateBalance(20, win_amount);
 }
-function win(userID, balance) {
+function win() {
     const containers = document.getElementsByClassName("slot-container");
     let win = 0;
     let win_array1 = [];
@@ -175,24 +199,32 @@ function win(userID, balance) {
                         win += 300;
                     }
                 }
-                balance += win;
             }
     }
     console.log(win);
     setTimeout (() => {
         document.getElementById("win_amount").innerHTML = `$${win}`;
     }, 4700);
+    return win;
 }
-function UpdateBalance(userID, newBalance) {
-    console.log("Updating balance:", newBalance);
-    fetch(`http://localhost:9292/updateBalance`, {
+function UpdateBalance(bet, win_amount) {
+    fetch("http://localhost:9292/updatebalance", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ balance: newBalance })
+        body: JSON.stringify({
+            bet: bet,
+            win: win_amount
+        })
     })
-        .then(response => response.json())
+        .then((response) => {
+            if (!response.ok) {
+                // error processing
+                throw 'Error';
+            }
+            return response.json()
+        })
         .then(data => {
             if (data.success) {
                 console.log(data);

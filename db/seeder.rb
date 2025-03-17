@@ -21,7 +21,8 @@ class Seeder
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT NOT NULL,
       password TEXT NOT NULL,
-      balance INTEGER 
+      balance INTEGER,
+      admin BOOLEAN DEFAULT FALSE
     )')
     db.execute('CREATE TABLE stats (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,7 +32,7 @@ class Seeder
   end
   def self.populate_tables 
     bcrypt_password = BCrypt::Password.create('admin')
-    db.execute('INSERT INTO users (username, password, balance) VALUES ("admin", ?, 1000)', [bcrypt_password])
+    db.execute('INSERT INTO users (username, password, balance, admin) VALUES ("admin", ?, 1000, true)', [bcrypt_password])
     bcrypt_password1 = BCrypt::Password.create('user')
     db.execute('INSERT INTO users (username, password, balance) VALUES ("user", ?, 1000)', [bcrypt_password1])
 

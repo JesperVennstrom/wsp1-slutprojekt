@@ -8,13 +8,43 @@
     <script src="script.js"></script>
 </head>
 <body>
+    <% @stat_list = [] %>
+    <% @stats.each do |stat| %>
+        <% @stat_list.append(stat["value"])%>
+        <% p(@stat_list) %>
+    <% end %>
     <header>
         <h1>Casino of Hell</h1>
         <div>
             <div class="account-tab">Account</div>
             <div class="deposit-tab" onclick="showPopup()">Deposit</div>
+            <div class="logout-tab" onclick="window.location.href='/logout'">Logout</div>
         </div>
     </header>
+    <% if (session[:user]["admin"]==1) %>
+        <div> 
+            <h3> Change Odds </h3>
+            <form action="/change_odds" method="POST">
+                <span id = "odd1"> <%= @stat_list[0] %> </span>
+                <input type="range" min="0" max="300" value="50" class="slider" name="odds1" onInput = "updateSlider(this.value, 1)">
+                <span id = "odd2"> <%= @stat_list[1] %> </span>
+                <input type="range" min="0" max="300" value="50" class="slider" name="odds2" onInput = "updateSlider(this.value, 2)">
+                <span id = "odd3"> <%= @stat_list[2] %> </span>
+                <input type="range" min="0" max="300" value="50" class="slider" name="odds3" onInput = "updateSlider(this.value, 3)">
+                <span id = "odd4"> <%= @stat_list[3] %> </span>
+                <input type="range" min="0" max="300" value="50" class="slider" name="odds4" onInput = "updateSlider(this.value, 4)">
+                <span id = "odd5"> <%= @stat_list[4] %> </span>
+                <input type="range" min="0" max="300" value="50" class="slider" name="odds5" onInput = "updateSlider(this.value, 5)">
+                <span id = "odd6"> <%= @stat_list[5] %> </span>
+                <input type="range" min="0" max="300" value="50" class="slider" name="odds6" onInput = "updateSlider(this.value, 6)">
+                
+                <span id = "wild"> 1000 </span>
+                
+                <button type="submit">Change Odds</button>
+            </form>
+
+        </div>
+    <% end %>
     <main>
         <div class="slot-machine">
             <div class="slot-container">
@@ -111,19 +141,14 @@
         <div class="tabs">
             <div class="tab">
             <h1> Balance </h1>
-            <p id="balance"> $<%= @balance %> </p>
+            <p id="balance"> $<%= session[:user]['balance'] %> </p>
             </div>
             <div class="tab">Input</div>
             <div class="tab">
             <h6> Win Amount: </h6>
             <p id="win_amount"> </p> 
             </div>
-            <% @stat_list = [] %>
-            <% @stats.each do |stat| %>
-                <% @stat_list.append(stat["value"])%>
-                <% p(@stat_list) %>
-            <% end %>
-            <div id="spin" onclick="randomizer(<%= @stat_list %>, <%= session[:user]["id"] %> ,<%= session[:user]["balance"] %> )"> Spin </div>
+            <div id="spin" onclick="randomizer(<%= @stat_list %>)"> Spin </div>
         </div>
     </main>
 
