@@ -82,5 +82,20 @@ class App < Sinatra::Base
           { success: false, message: "User not found" }.to_json
         end
     end
+    post '/stats/update' do
+        value1 = params["odds1"].to_i
+        value2 = value1 + params["odds2"].to_i
+        value3= value2 + params["odds3"].to_i
+        value4 = value3 + params["odds4"].to_i
+        value5 = value4 + params["odds5"].to_i
+        value6 = value5 + params["odds6"].to_i
+        db.execute('UPDATE stats SET value = ? WHERE id = ?', [value1, 1])
+        db.execute('UPDATE stats SET value = ? WHERE id = ?', [value2 , 2])
+        db.execute('UPDATE stats SET value = ? WHERE id = ?', [value3, 3])
+        db.execute('UPDATE stats SET value = ? WHERE id = ?', [value4, 4])
+        db.execute('UPDATE stats SET value = ? WHERE id = ?', [value5, 5])
+        db.execute('UPDATE stats SET value = ? WHERE id = ?', [value6, 6])
+        redirect('/slot')
+    end
 end
   

@@ -24,7 +24,7 @@
     <% if (session[:user]["admin"]==1) %>
         <div> 
             <h3> Change Odds </h3>
-            <form action="/change_odds" method="POST">
+            <form action="/stats/update" method="POST">
                 <span id = "odd1"> <%= @stat_list[0] %> </span>
                 <input type="range" min="0" max="300" value="50" class="slider" name="odds1" onInput = "updateSlider(this.value, 1)">
                 <span id = "odd2"> <%= @stat_list[1] %> </span>
@@ -40,7 +40,7 @@
                 
                 <span id = "wild"> 1000 </span>
                 
-                <button type="submit">Change Odds</button>
+                <button type="submit" id = "odds_submit">Change Odds</button>
             </form>
 
         </div>

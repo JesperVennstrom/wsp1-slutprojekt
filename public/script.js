@@ -19,28 +19,34 @@ function depositMoney() {
     }
 }
 function updateSlider(odd, id) {
+    odds_percent = parseInt(odd) / 10;
+    odd_string = `${odds_percent}%`;
     if (id == 1) {
-        document.getElementById("odd1").innerHTML = odd;
+        document.getElementById("odd1").innerHTML = odd_string;
     } else if (id == 2) {
-        document.getElementById("odd2").innerHTML = odd;
+        document.getElementById("odd2").innerHTML = odd_string;
     } else if (id == 3) {
-        document.getElementById("odd3").innerHTML = odd;
+        document.getElementById("odd3").innerHTML = odd_string;
     } else if (id == 4) {
-        document.getElementById("odd4").innerHTML = odd;
+        document.getElementById("odd4").innerHTML = odd_string;
     } else if (id == 5) {
-        document.getElementById("odd5").innerHTML = odd;
+        document.getElementById("odd5").innerHTML = odd_string;
     } else if (id == 6) {
-        document.getElementById("odd6").innerHTML = odd;
+        document.getElementById("odd6").innerHTML = odd_string;
     } 
-    value1 = document.getElementById("odd1").innerHTML;
-    value2 = document.getElementById("odd2").innerHTML;
-    value3 = document.getElementById("odd3").innerHTML;
-    value4 = document.getElementById("odd4").innerHTML;
-    value5 = document.getElementById("odd5").innerHTML;
-    value6 = document.getElementById("odd6").innerHTML;
-    wild_value = document.getElementById("wild").innerHTML;
-    console.log(value1, value2, value3, value4, value5, value6, wild_value);
-    wild_value = 1000 - parseInt(value1) - parseInt(value2) - parseInt(value3) - parseInt(value4) - parseInt(value5) - parseInt(value6); 
+    value1 = document.getElementById("odd1").innerHTML.trim();
+    value2 = document.getElementById("odd2").innerHTML.trim();
+    value3 = document.getElementById("odd3").innerHTML.trim();
+    value4 = document.getElementById("odd4").innerHTML.trim();
+    value5 = document.getElementById("odd5").innerHTML.trim();
+    value6 = document.getElementById("odd6").innerHTML.trim();
+    wild_value = 100 - parseFloat(value1) - parseFloat(value2) - parseFloat(value3) - parseFloat(value4) - parseFloat(value5) - parseFloat(value6)
+    document.getElementById("wild").innerHTML = `${wild_value}%`; 
+    if (wild_value < 0) {
+        document.getElementById("odds_submit").style.display = "none";
+    } else {
+        document.getElementById("odds_submit").style.display = "block";
+    }
 }
 
 function randomizer(stats) {
