@@ -4,6 +4,7 @@ require 'bcrypt'
 require 'rack-flash'
 require 'sinatra/activerecord'
 require 'json'
+require 'time'
 
 class App < Sinatra::Base
 
@@ -29,7 +30,17 @@ class App < Sinatra::Base
         if session[:user]
             @stats = db.execute('SELECT value FROM stats')
             @balance = session[:user]['balance']
+            @history = db.execute('SELECT value FROM economy WHERE user_id = ?', [session[:user]['id']])
+            p @history
             erb(:"index")
+        else 
+            redirect('/login')
+        end
+    end
+    get '/account/:id' do |id|
+        if session[:user]
+            @history = db.execute('SELECT * FROM economy WHERE user_id = ?', [id])
+            erb(:"account")
         else 
             redirect('/login')
         end
@@ -75,8 +86,10 @@ class App < Sinatra::Base
         request_payload = JSON.parse(request.body.read) # Read the JSON request body
         user = db.execute('SELECT * FROM users WHERE id = ?', [session[:user]["id"]]).first
         balance = user['balance'] + request_payload["win"] - request_payload["bet"]
+        history = request_payload["win"] - request_payload["bet"]
         if user
             db.execute('UPDATE users SET balance = ? WHERE id = ?', [balance, session[:user]["id"]])
+            db.execute('INSERT INTO economy (value, user_id, time) VALUES (?, ?, ?)', [history, session[:user]["id"] , Time.now.to_s])
           { success: true, message: "Balance updated", balance: balance }.to_json
         else
           { success: false, message: "User not found" }.to_json

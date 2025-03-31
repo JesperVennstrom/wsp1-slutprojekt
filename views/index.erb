@@ -16,7 +16,7 @@
     <header>
         <h1>Casino of Hell</h1>
         <div>
-            <div class="account-tab">Account</div>
+            <button class="account-tab" onclick = "window.location.href ='/account/<%=session[:user]["id"]%>'" >Account</button>
             <div class="deposit-tab" onclick="showPopup()">Deposit</div>
             <div class="logout-tab" onclick="window.location.href='/logout'">Logout</div>
         </div>

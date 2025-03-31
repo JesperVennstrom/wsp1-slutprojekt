@@ -12,9 +12,9 @@ class Seeder
   def self.drop_tables
     db.execute('DROP TABLE IF EXISTS users')
     db.execute('DROP TABLE IF EXISTS stats')
-    
-  
+    db.execute('DROP TABLE IF EXISTS economy')
   end
+
   def self.create_tables
   
     db.execute('CREATE TABLE users (
@@ -28,6 +28,12 @@ class Seeder
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       value INTEGER NOT NULL
+    )')
+    db.execute('CREATE TABLE economy (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      value INTEGER NOT NULL,
+      user_id INTEGER NOT NULL, 
+      time STRING NOT NULL
     )')
   end
   def self.populate_tables 

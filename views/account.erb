@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino of Hell</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div id="history"> 
+        <h3> Account History </h3>
+        <table>
+            <tr>
+                <th> Date </th>
+                <th> Amount </th>
+            </tr>
+            <% @history.each do |transaction| %>
+                <tr>
+                    <td> <%= transaction["time"] %> </td>
+                    <td> <%= transaction["value"] %> </td>
+                </tr>
+            <% end %>
+        </table>
+    </div>
+</body>
+</html>
