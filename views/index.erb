@@ -48,7 +48,7 @@
     <main>
         <div class="slot-machine">
             <div class="slot-container">
-                <div class="tile"><image src="img/WILD_ICON.png"></div>
+                <div class="tile"><image src="img/jonkler.png"></div>
                 <div class="tile"><image src="img/WILD_ICON.png"></div>
                 <div class="tile"><image src="img/WILD_ICON.png"></div>
                 <div class="tile"><image src="img/WILD_ICON.png"></div>
@@ -151,6 +151,18 @@
             <div id="spin" onclick="randomizer(<%= @stat_list %>)"> Spin </div>
         </div>
     </main>
+    <div class="jackpots">
+        <% @jackpots.each do |jackpot| %>
+            <div class="jackpot">
+                <h3> <%= jackpot["name"] %> </h3>
+                <p id="jackpot_amount"> $<%= jackpot["value"] %> </p>
+                <p> <%= jackpot["price"] %> </p>
+                <form action="/jackpot/<%= jackpot["id"] %>" method = "POST">
+                    <button>Play</button>
+                </form>
+            </div>
+        <% end %>
+    </div>
 
     <div class="overlay" id="overlay" onclick="hidePopup()"></div>
     <div class="popup" id="popup">

@@ -8,19 +8,25 @@
 </head>
 <body>
     <div id="history"> 
-        <h3> Account History </h3>
-        <table>
-            <tr>
-                <th> Date </th>
-                <th> Amount </th>
-            </tr>
-            <% @history.each do |transaction| %>
+        <div id = "feed">
+            <table>
                 <tr>
-                    <td> <%= transaction["time"] %> </td>
-                    <td> <%= transaction["value"] %> </td>
+                    <th> Date </th>
+                    <th> Amount </th>
                 </tr>
-            <% end %>
-        </table>
+                <% @history.each do |transaction| %>
+                    <tr>
+                        <td> <%= transaction["time"] %> </td>
+                        <td> <%= transaction["value"] %> </td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
+        <div id = "highscore">
+        </div>
+        <div id = "absolute_balance" >
+         <p> <%= @total %> </p>
+        </div>
     </div>
 </body>
 </html>

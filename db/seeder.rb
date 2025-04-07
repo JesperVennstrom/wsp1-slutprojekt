@@ -13,6 +13,8 @@ class Seeder
     db.execute('DROP TABLE IF EXISTS users')
     db.execute('DROP TABLE IF EXISTS stats')
     db.execute('DROP TABLE IF EXISTS economy')
+    db.execute('DROP TABLE IF EXISTS jackpots')
+    db.execute('DROP TABLE IF EXISTS jackpot_users')
   end
 
   def self.create_tables
@@ -35,6 +37,17 @@ class Seeder
       user_id INTEGER NOT NULL, 
       time STRING NOT NULL
     )')
+    db.execute('CREATE TABLE jackpots (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      value INTEGER NOT NULL,
+      price INTEGER DEFAULT 0
+    )')
+    db.execute('CREATE TABLE jackpot_users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      jackpot_id INTEGER NOT NULL
+    )')
   end
   def self.populate_tables 
     bcrypt_password = BCrypt::Password.create('admin')
@@ -48,6 +61,10 @@ class Seeder
     db.execute('INSERT INTO stats (name, value) VALUES ("odd4", 725)')
     db.execute('INSERT INTO stats (name, value) VALUES ("odd5", 825)')
     db.execute('INSERT INTO stats (name, value) VALUES ("wild", 900)')
+
+    db.execute('INSERT INTO jackpots (name, value, price) VALUES ("jackpot1", 1000, 10)')
+    db.execute('INSERT INTO jackpots (name, value, price) VALUES ("jackpot2", 2000, 20)')
+    db.execute('INSERT INTO jackpots (name, value, price) VALUES ("jackpot3", 3000, 30)')
   end 
 
   private

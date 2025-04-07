@@ -30,7 +30,7 @@ class App < Sinatra::Base
         if session[:user]
             @stats = db.execute('SELECT value FROM stats')
             @balance = session[:user]['balance']
-            @history = db.execute('SELECT value FROM economy WHERE user_id = ?', [session[:user]['id']])
+            @jackpots = db.execute('SELECT * FROM jackpots')
             p @history
             erb(:"index")
         else 
@@ -39,7 +39,11 @@ class App < Sinatra::Base
     end
     get '/account/:id' do |id|
         if session[:user]
+            @total = 0
             @history = db.execute('SELECT * FROM economy WHERE user_id = ?', [id])
+            for i in 0..@history.length-1
+                @total += @history[i]["value"]
+            end
             erb(:"account")
         else 
             redirect('/login')
@@ -89,7 +93,7 @@ class App < Sinatra::Base
         history = request_payload["win"] - request_payload["bet"]
         if user
             db.execute('UPDATE users SET balance = ? WHERE id = ?', [balance, session[:user]["id"]])
-            db.execute('INSERT INTO economy (value, user_id, time) VALUES (?, ?, ?)', [history, session[:user]["id"] , Time.now.to_s])
+            db.execute('INSERT INTO economy (value, user_id, time) VALUES (?, ?, ?)', [history, session[:user]["id"] , Time.now.strftime("%Y-%d-%m %H:%M:%S")])
           { success: true, message: "Balance updated", balance: balance }.to_json
         else
           { success: false, message: "User not found" }.to_json
@@ -109,6 +113,18 @@ class App < Sinatra::Base
         db.execute('UPDATE stats SET value = ? WHERE id = ?', [value5, 5])
         db.execute('UPDATE stats SET value = ? WHERE id = ?', [value6, 6])
         redirect('/slot')
+    end
+    post '/jackpot/:id' do |id|
+        if session[:user]
+            jackpot = db.execute('SELECT * FROM jackpots WHERE id = ?', [id]).first
+            if jackpot
+                db.execute('INSERT INTO jackpot_users (user_id, jackpot_id) VALUES (?, ?)', [session[:user]["id"], id])
+                db.execute('UPDATE jackpots SET value = ? WHERE id = ?', [jackpot["value"] + 1, id])
+            end
+            redirect('/slot')
+        else
+            redirect('/login')
+        end
     end
 end
   
