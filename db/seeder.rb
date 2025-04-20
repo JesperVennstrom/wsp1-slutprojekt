@@ -23,7 +23,7 @@ class Seeder
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT NOT NULL,
       password TEXT NOT NULL,
-      balance INTEGER,
+      balance INTEGER DEFAULT 0,
       admin BOOLEAN DEFAULT FALSE
     )')
     db.execute('CREATE TABLE stats (
@@ -60,17 +60,17 @@ class Seeder
     db.execute('INSERT INTO stats (name, value) VALUES ("odd3", 600)')
     db.execute('INSERT INTO stats (name, value) VALUES ("odd4", 725)')
     db.execute('INSERT INTO stats (name, value) VALUES ("odd5", 825)')
-    db.execute('INSERT INTO stats (name, value) VALUES ("wild", 900)')
+    db.execute('INSERT INTO stats (name, value) VALUES ("odd6", 900)')
 
-    db.execute('INSERT INTO jackpots (name, value, price) VALUES ("jackpot1", 1000, 10)')
-    db.execute('INSERT INTO jackpots (name, value, price) VALUES ("jackpot2", 2000, 20)')
-    db.execute('INSERT INTO jackpots (name, value, price) VALUES ("jackpot3", 3000, 30)')
+    db.execute('INSERT INTO jackpots (name, value, price) VALUES ("jackpot1", 100000, 10)')
+    db.execute('INSERT INTO jackpots (name, value, price) VALUES ("jackpot2", 200000, 20)')
+    db.execute('INSERT INTO jackpots (name, value, price) VALUES ("jackpot3", 300000, 30)')
   end 
 
   private
   def self.db
     return @db if @db
-    @db = SQLite3::Database.new('db/todos.sqlite')
+    @db = SQLite3::Database.new('db/casino.sqlite')
     @db.results_as_hash = true
     @db
   end

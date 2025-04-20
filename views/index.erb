@@ -8,11 +8,6 @@
     <script src="script.js"></script>
 </head>
 <body>
-    <% @stat_list = [] %>
-    <% @stats.each do |stat| %>
-        <% @stat_list.append(stat["value"])%>
-        <% p(@stat_list) %>
-    <% end %>
     <header>
         <h1>Casino of Hell</h1>
         <div>
@@ -25,20 +20,20 @@
         <div> 
             <h3> Change Odds </h3>
             <form action="/stats/update" method="POST">
-                <span id = "odd1"> <%= @stat_list[0] %> </span>
+                <span id = "odd1"> 5% </span>
                 <input type="range" min="0" max="300" value="50" class="slider" name="odds1" onInput = "updateSlider(this.value, 1)">
-                <span id = "odd2"> <%= @stat_list[1] %> </span>
+                <span id = "odd2"> 5% </span>
                 <input type="range" min="0" max="300" value="50" class="slider" name="odds2" onInput = "updateSlider(this.value, 2)">
-                <span id = "odd3"> <%= @stat_list[2] %> </span>
+                <span id = "odd3"> 5% </span>
                 <input type="range" min="0" max="300" value="50" class="slider" name="odds3" onInput = "updateSlider(this.value, 3)">
-                <span id = "odd4"> <%= @stat_list[3] %> </span>
+                <span id = "odd4"> 5% </span>
                 <input type="range" min="0" max="300" value="50" class="slider" name="odds4" onInput = "updateSlider(this.value, 4)">
-                <span id = "odd5"> <%= @stat_list[4] %> </span>
+                <span id = "odd5"> 5% </span>
                 <input type="range" min="0" max="300" value="50" class="slider" name="odds5" onInput = "updateSlider(this.value, 5)">
-                <span id = "odd6"> <%= @stat_list[5] %> </span>
+                <span id = "odd6"> 5% </span>
                 <input type="range" min="0" max="300" value="50" class="slider" name="odds6" onInput = "updateSlider(this.value, 6)">
                 
-                <span id = "wild"> 1000 </span>
+                <span id = "wild"> 70% </span>
                 
                 <button type="submit" id = "odds_submit">Change Odds</button>
             </form>
@@ -137,7 +132,10 @@
                 <div class="tile"><image src="img/WILD_ICON.png"></image></div>
             </div>
         </div>
-
+        <div class="wheel-container">
+            <div id = "arrow"></div>
+            <svg id="wheel" width="300" height="300" viewBox="0 0 300 300"></svg>
+        </div>
         <div class="tabs">
             <div class="tab">
             <h1> Balance </h1>
@@ -148,7 +146,7 @@
             <h6> Win Amount: </h6>
             <p id="win_amount"> </p> 
             </div>
-            <div id="spin" onclick="randomizer(<%= @stat_list %>)"> Spin </div>
+            <div id="spin" onclick="randomizer()"> Spin </div>
         </div>
     </main>
     <div class="jackpots">
@@ -167,8 +165,10 @@
     <div class="overlay" id="overlay" onclick="hidePopup()"></div>
     <div class="popup" id="popup">
         <h2>Deposit Money</h2>
-        <input type="number" placeholder="Enter amount" id="depositAmount">
-        <button onclick="depositMoney()">Deposit</button>
+        <form action="/deposit" method="POST">
+            <input type="number" name="depositAmount" placeholder="Enter amount" id="depositAmount">
+            <button onclick="depositMoney()" type="submit">Deposit</button>
+        </form>
         <button onclick="hidePopup()">Close</button>
     </div>
     <script src="script.js?<%= Time.now %>"></script>

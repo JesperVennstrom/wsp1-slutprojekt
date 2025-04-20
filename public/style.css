@@ -181,11 +181,14 @@ main {
   flex-direction: row;
 }
 #feed {
+  position: relative;
   background-color: #2c2c2c; 
   border: 5px solid #1e1e1e;
   width: calc(100% * 2/3 - 10px);
   height: calc(75% - 10px);
   overflow-y: hidden;
+  display: flex;
+  flex-direction: column-reverse;
 }
 #highscore {
   background-color: #2c2c2c;
@@ -200,4 +203,35 @@ main {
   width: calc(100% - 10px);
   height: calc(25% - 5px);
   overflow-y: hidden;
+}
+#wheel {
+  position: absolute;
+  width: 450px;
+  height: 450px;
+}
+.wheel-container {
+  position:absolute;
+  width: 450px;
+  height: 450px;
+}
+#arrow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  z-index: 1000;
+}
+.table_header {
+  position: absolute;
+  top: 0;
+  width: 90%;
+  background-color: #2c2c2c;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 10px 10px 0;
 }
