@@ -28,5 +28,8 @@
          <p> <%= @total %> </p>
         </div>
     </div>
+    <form action="/account/<%= session[:user]["id"] %>/delete" method="POST">
+        <button type="submit" id="delete_account">Delete Account</button>
+    </form>
 </body>
 </html>

@@ -4,6 +4,7 @@ class Users
   
         @db = SQLite3::Database.new("db/casino.sqlite")
         @db.results_as_hash = true
+        @db.execute("PRAGMA foreign_keys = ON")
   
         return @db
     end
@@ -22,5 +23,8 @@ class Users
 
     def self.select_by_id(id)
         db.execute('SELECT * FROM users WHERE id = ?', [id]).first
+    end
+    def self.delete(id)
+        db.execute('DELETE FROM users WHERE id = ?', [id])
     end
 end

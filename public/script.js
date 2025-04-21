@@ -19,12 +19,13 @@ function depositMoney() {
     }
 }
 function updateSlider(odd, id) {
-    odds_percent = parseInt(odd) / 10;
-    odd_string = `${odds_percent}%`;
-    wild_value = 100;
+    let odds_percent = parseInt(odd) / 10;
+    let odd_string = `${odds_percent}%`;
+    let wild_value = 100;
     for (let i = 1; i <= 6; i++) {
         if (i == id) {
-            document.getElementById(`odd${i}`).innerHTML = odds_string;
+            console.log(`odd${i}`)
+            document.getElementById(`odd${i}`).innerHTML = odd_string;
         }
         wild_value -= parseFloat(document.getElementById(`odd${i}`).innerHTML.trim());
     }
@@ -37,9 +38,11 @@ function updateSlider(odd, id) {
 }
 
 async function randomizer() {
-    let  max = 1000;
+    let max = 0
     const tiles = document.getElementsByClassName("tile");
     const parent = document.getElementsByClassName("slot-machine");
+
+    let icon_array = ["CRUSIFIX2.png", "PENTAGRAM.png", "TRIDENT.png", "ZOMBIE_LOGO.png", "GHOST_LOGO2.png", "DEMON_LOGO.png", "WILD_ICON.png", "jonkler.png"];
 
     const winDisplay = document.getElementById("win_amount");
 
@@ -77,21 +80,21 @@ async function randomizer() {
         }
         const x = Math.floor(Math.random() * max);
         if (x < stats[0]) {
-            symbol = "CRUSIFIX2.png";
+            symbol = icon_array[0];
         } else if (x < stats[1]) {
-            symbol = "PENTAGRAM.png";
+            symbol = icon_array[1];
         } else if (x < stats[2]) {
-            symbol = "TRIDENT.png";
+            symbol = icon_array[2];
         } else if (x < stats[3]) {
-            symbol = "ZOMBIE_LOGO.png";
+            symbol = icon_array[3];
         } else if (x < stats[4]) {
-            symbol = "GHOST_LOGO2.png";
+            symbol = icon_array[4];
         } else if (x < stats[5]) {
-            symbol = "DEMON_LOGO.png";
+            symbol = icon_array[5];
         } else if (x < 1000) {
-            symbol = "WILD_ICON.png";
+            symbol = icon_array[6];
         } else {
-            symbol = "jonkler.png";
+            symbol = icon_array[7];
         }
 
         tile.querySelector('img').src = `img/${symbol}`; 
@@ -130,6 +133,7 @@ async function randomizer() {
         try {
             win_amount += await jackpot();
             UpdateBalance(20, win_amount);
+            document.getElementById("win_amount").innerHTML = `$${win_amount}`;
         } catch (error){
             console.error("Error in jackpot:", error);
         }
@@ -382,14 +386,10 @@ function win() {
                 }
             }
     }
-    console.log(win);
-    setTimeout (() => {
-        document.getElementById("win_amount").innerHTML = `$${win}`;
-    }, 4700);
     return win;
 }
 function UpdateBalance(bet, win_amount) {
-    fetch("http://localhost:9292/updatebalance", {
+    fetch("http://localhost:9292/balance/update", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

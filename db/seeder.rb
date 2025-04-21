@@ -10,11 +10,11 @@ class Seeder
   end
 
   def self.drop_tables
-    db.execute('DROP TABLE IF EXISTS users')
     db.execute('DROP TABLE IF EXISTS stats')
     db.execute('DROP TABLE IF EXISTS economy')
-    db.execute('DROP TABLE IF EXISTS jackpots')
     db.execute('DROP TABLE IF EXISTS jackpot_users')
+    db.execute('DROP TABLE IF EXISTS jackpots')
+    db.execute('DROP TABLE IF EXISTS users')
   end
 
   def self.create_tables
@@ -35,7 +35,8 @@ class Seeder
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       value INTEGER NOT NULL,
       user_id INTEGER NOT NULL, 
-      time STRING NOT NULL
+      time STRING NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
     )')
     db.execute('CREATE TABLE jackpots (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,7 +47,9 @@ class Seeder
     db.execute('CREATE TABLE jackpot_users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER NOT NULL,
-      jackpot_id INTEGER NOT NULL
+      jackpot_id INTEGER NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (jackpot_id) REFERENCES jackpots(id) ON DELETE CASCADE
     )')
   end
   def self.populate_tables 
@@ -71,6 +74,7 @@ class Seeder
   def self.db
     return @db if @db
     @db = SQLite3::Database.new('db/casino.sqlite')
+    @db.execute('PRAGMA foreign_keys = ON')
     @db.results_as_hash = true
     @db
   end

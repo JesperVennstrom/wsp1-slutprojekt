@@ -20,15 +20,6 @@ class App < Sinatra::Base
         use Rack::Flash
     end
 
-    def db
-        return @db if @db
-  
-        @db = SQLite3::Database.new("db/casino.sqlite")
-        @db.results_as_hash = true
-  
-        return @db
-    end
-
     get '/' do
         redirect '/login'
     end
@@ -63,12 +54,22 @@ class App < Sinatra::Base
     end
     post '/login' do
         user = Users.select_by_username(params[:username]).first
-
+        
+        session[:login_attempts] ||= 0
+        session[:time_since_last_attempt] ||= Time.now
+        if session[:login_attempts] >= 3 && Time.now - session[:time_since_last_attempt] < 60
+            flash[:error] = 'För många inloggningsförsök. Försök igen om 60 sekunder.'
+            redirect('/login')
+        else 
+            session[:time_since_last_attempt] = Time.now
+        end
         if user && BCrypt::Password.new(user['password']) == params[:password]
             session[:user] = user
+            session[:login_attempts] = 0
         else 
             status 401
             flash[:error] = 'Fel användarnamn eller lösenord'
+            session[:login_attempts] += 1
         end
         redirect('/login')
     end
@@ -88,7 +89,7 @@ class App < Sinatra::Base
         session[:user] = nil
         redirect('/login')
     end
-    post '/updatebalance' do
+    post '/balance/update' do
         content_type :json
       
         request_payload = JSON.parse(request.body.read) # Read the JSON request body
@@ -96,8 +97,8 @@ class App < Sinatra::Base
         balance = user['balance'] + request_payload["win"] - request_payload["bet"]
         history = request_payload["win"] - request_payload["bet"]
         if user && user['balance'] >= 20
-            Users.update_balance(session[:user]["id"], balance)
-            Economy.create(history, session[:user]["id"], Time.now.strftime("%Y-%d-%m %H:%M:%S"))
+            Users.update_balance(user["id"], balance)
+            Economy.create(history, user["id"], Time.now.strftime("%Y-%d-%m %H:%M:%S"))
           { success: true, message: "Balance updated", balance: balance }.to_json
         else
           { success: false, message: "User not found" }.to_json
@@ -109,7 +110,6 @@ class App < Sinatra::Base
         odd_total = 0
         while content
             if params["odds#{i}"]
-                p("hello2")
                 Stats.update_value(params["odds#{i}"].to_i + odd_total, i)
                 odd_total += params["odds#{i}"].to_i
             else
@@ -121,16 +121,15 @@ class App < Sinatra::Base
     end
     post '/jackpot/:id' do |id|
         if session[:user]
-            p(id)
             jackpot = Jackpots.select_by_id(id)
-            p(jackpot)
-            jackpot_users = db.execute('SELECT * FROM jackpot_users WHERE user_id = ? AND jackpot_id = ?', [session[:user]["id"], id]).first
+            jackpot_users = JackpotUsers.select_by_ids(session[:user]["id"], id).first
+            p(jackpot_users)
             if jackpot
                 if !jackpot_users
                     if session[:user]["balance"] >= jackpot["price"]
                         Users.update_balance(session[:user]["id"], session[:user]["balance"] - jackpot["price"])
                         Economy.create(jackpot["price"], session[:user]["id"], Time.now.strftime("%Y-%d-%m %H:%M:%S"))
-                        db.execute('INSERT INTO jackpot_users (user_id, jackpot_id) VALUES (?, ?)', [session[:user]["id"], id])
+                        JackpotUsers.create(session[:user]["id"], id)
                         jackpot_add = jackpot["price"] / 10
                         Jackpots.update_value((jackpot["value"] + jackpot_add), id)
                     end
@@ -146,7 +145,7 @@ class App < Sinatra::Base
         jackpot_list = [];
         jackpot_array = [];
         jackpots = Jackpots.index()
-        jackpot_users = db.execute('SELECT * FROM jackpot_users')
+        jackpot_users = JackpotUsers.index()
         for jackpot in jackpot_users
             if jackpot["user_id"] == session[:user]["id"]
                 jackpot_list.append(jackpot["jackpot_id"])
@@ -175,9 +174,17 @@ class App < Sinatra::Base
     end
     post '/deposit' do
         if session[:user]
-            Users.update_balance(session[:user]["id"], session[:user]["balance"] + params["depositAmount"])
+            Users.update_balance(session[:user]["id"], session[:user]["balance"].to_i + params["depositAmount"].to_i)
         end
         redirect('/slot')
     end
+    post '/account/:id/delete' do |id|
+        if session[:user]["id"] == id.to_i
+            Users.delete(id)
+            session[:user] = nil
+        end
+        redirect('/login')
+    end
+
 end
   

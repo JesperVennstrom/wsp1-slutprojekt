@@ -4,6 +4,7 @@ class Jackpots
 
         @db = SQLite3::Database.new("db/casino.sqlite")
         @db.results_as_hash = true
+        @db.execute("PRAGMA foreign_keys = ON")
 
         return @db
     end
