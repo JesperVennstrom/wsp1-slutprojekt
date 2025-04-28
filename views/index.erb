@@ -158,7 +158,21 @@
                 <form action="/jackpot/<%= jackpot["id"] %>" method = "POST">
                     <button>Play</button>
                 </form>
+                <% if session[:user]["admin"] == 1 %>
+                    <form action="/jackpot/<%= jackpot["id"]%>/delete" method = "POST">
+                        <button>Delete</button>
+                    </form>
+                <% end %>
             </div>
+        <% end %>
+        <% if session[:user]["admin"] == 1 %>
+            <h3> Create Jackpot </h3>
+            <form action="/jackpot/create" method = "POST">
+                <input type="text" name="name" placeholder="Name">
+                <input type="number" name="value" placeholder="Value">
+                <input type="number" name="price" placeholder="Price">
+                <button> Create </button>
+            </form>
         <% end %>
     </div>
 

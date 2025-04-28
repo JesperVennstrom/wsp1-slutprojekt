@@ -108,14 +108,25 @@ class App < Sinatra::Base
         i = 1
         content = true
         odd_total = 0
-        while content
-            if params["odds#{i}"]
-                Stats.update_value(params["odds#{i}"].to_i + odd_total, i)
-                odd_total += params["odds#{i}"].to_i
-            else
-                content = false
+        if session[:user]["admin"] == 1
+            while content
+                if params["odds#{i}"]
+                    Stats.update_value(params["odds#{i}"].to_i + odd_total, i)
+                    odd_total += params["odds#{i}"].to_i
+                else
+                    content = false
+                end
+                i += 1
             end
-            i += 1
+        end 
+        redirect('/slot')
+    end
+    post '/jackpot/create' do
+        p(session[:user])
+        if session[:user]["admin"] == 1
+            p(params)
+            Jackpots.create(params["name"], params["value"].to_i, params["price"].to_i)
+            p(Jackpots.index().last)
         end
         redirect('/slot')
     end
@@ -185,6 +196,21 @@ class App < Sinatra::Base
         end
         redirect('/login')
     end
+    post '/jackpot/:id/delete' do |id|
+        if session[:user]["admin"] == 1
+            jackpot = Jackpots.select_by_id(id)
+            player_amount = JackpotUsers.select_by_jackpot_id(id).length
+            if jackpot
+                JackpotUsers.select_by_jackpot_id(id).each do |user|
+                    Users.update_balance(user["user_id"], Users.select_by_id(user["user_id"])["balance"] + (jackpot["value"] / player_amount))
+                    Economy.create((jackpot["value"] / player_amount), user["user_id"], Time.now.strftime("%Y-%d-%m %H:%M:%S"))
+                end
+                Jackpots.delete(id)
+            end
+        end
+        redirect('/slot')
+    end 
 
 end
   
+ 

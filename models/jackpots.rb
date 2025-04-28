@@ -24,4 +24,7 @@ class Jackpots
     def self.update_value(value, id)
         db.execute('UPDATE jackpots SET value = ? WHERE id = ?', [value, id])
     end
+    def self.delete(id)
+        db.execute('DELETE FROM jackpots WHERE id = ?', [id])
+    end
 end
