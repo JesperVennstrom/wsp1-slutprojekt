@@ -10,17 +10,17 @@
 <body>
     <main> 
         <div class='login_square'>
-            <h1>Login</h1>
+            <h1>Register</h1>
             <% if flash[:error] %>
                 <p class="error"><%= flash[:error] %></p>
             <% end %>
-            <form action="/login" method='POST'>
+            <form action="/users" method='POST'>
                 <input type='text' placeholder='Username' name='username'>
                 <input type='password' placeholder='Password' name='password'>
-                <button type='submit'>Login</button>
-            </form>
-            <form action='/register' method='GET'>
                 <button type='submit'>Register</button>
+            </form>
+            <form action='/login' method='GET'>
+                <button type='submit'>Login</button>
             </form>
         </div>
     </main>

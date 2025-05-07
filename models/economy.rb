@@ -24,4 +24,8 @@ class Economy
     def self.select_by_id(id)
         db.execute('SELECT * FROM economy WHERE id = ?', [id])
     end
+
+    def self.merge_user(user_id)
+        db.execute('SELECT * FROM economy INNER JOIN users ON economy.user_id = users.id WHERE economy.user_id = ?', [user_id])
+    end
 end

@@ -11,9 +11,11 @@
     <header>
         <h1>Casino of Hell</h1>
         <div>
-            <button class="account-tab" onclick = "window.location.href ='/account/<%=session[:user]["id"]%>'" >Account</button>
+            <button class="account-tab" onclick = "window.location.href ='/economies'" >Account</button>
             <div class="deposit-tab" onclick="showPopup()">Deposit</div>
-            <div class="logout-tab" onclick="window.location.href='/logout'">Logout</div>
+            <form action="/logout" method="POST">
+                <button class="logout-tab">Logout</button>
+            </form>
         </div>
     </header>
     <% if (session[:user]["admin"]==1) %>
@@ -155,11 +157,13 @@
                 <h3> <%= jackpot["name"] %> </h3>
                 <p id="jackpot_amount"> $<%= jackpot["value"] %> </p>
                 <p> <%= jackpot["price"] %> </p>
-                <form action="/jackpot/<%= jackpot["id"] %>" method = "POST">
+                <form action="/jackpot_users" method = "POST">
                     <button>Play</button>
+                    <input type="hidden" name="jackpot_id" value="<%= jackpot["id"] %>">
                 </form>
                 <% if session[:user]["admin"] == 1 %>
-                    <form action="/jackpot/<%= jackpot["id"]%>/delete" method = "POST">
+                    <form action="/jackpots/<%=jackpot["id"] %>/delete" method = "POST">
+                        <input type="hidden" name="jackpot_id" value="<%= jackpot["id"] %>">
                         <button>Delete</button>
                     </form>
                 <% end %>
@@ -167,7 +171,7 @@
         <% end %>
         <% if session[:user]["admin"] == 1 %>
             <h3> Create Jackpot </h3>
-            <form action="/jackpot/create" method = "POST">
+            <form action="/jackpots/create" method = "POST">
                 <input type="text" name="name" placeholder="Name">
                 <input type="number" name="value" placeholder="Value">
                 <input type="number" name="price" placeholder="Price">
@@ -179,7 +183,7 @@
     <div class="overlay" id="overlay" onclick="hidePopup()"></div>
     <div class="popup" id="popup">
         <h2>Deposit Money</h2>
-        <form action="/deposit" method="POST">
+        <form action="/users/update" method="POST">
             <input type="number" name="depositAmount" placeholder="Enter amount" id="depositAmount">
             <button onclick="depositMoney()" type="submit">Deposit</button>
         </form>

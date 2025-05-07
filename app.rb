@@ -28,26 +28,27 @@ class App < Sinatra::Base
             @balance = session[:user]['balance']
             @jackpots = Jackpots.index()
             p @history
-            erb(:"index")
+            erb(:"hell/index")
         else 
             redirect('/login')
         end
     end
-    get '/account/:id' do |id|
+    get '/economies' do
         if session[:user]
+            id = session[:user]["id"]
             @total = 0
-            @history = Economy.select_by_user_id(session[:user]["id"])
+            @history = Economy.merge_user(id)
             for i in 0..@history.length-1
                 @total += @history[i]["value"]
             end
-            erb(:"account")
+            erb(:"/economies/index")
         else 
             redirect('/login')
         end
     end
     get '/login' do
         if !session[:user]
-            erb(:login)
+            erb(:"sessions/index")
         else
             redirect('/slot')
         end
@@ -73,23 +74,23 @@ class App < Sinatra::Base
         end
         redirect('/login')
     end
-    get '/register' do
-        erb(:register)
+    get '/users/new' do
+        erb(:"users/new")
     end
-    post '/register' do
+    post '/users' do
         users = Users.select_by_username(params[:username])
         if users.empty?
             Users.create(params[:username], params[:password])
             redirect('/login')
         else
-            redirect('/register')
+            redirect('/users/new')
         end
     end
-    get '/logout' do
+    post '/logout' do
         session[:user] = nil
         redirect('/login')
     end
-    post '/balance/update' do
+    post '/users/update_spin' do
         content_type :json
       
         request_payload = JSON.parse(request.body.read) # Read the JSON request body
@@ -121,7 +122,7 @@ class App < Sinatra::Base
         end 
         redirect('/slot')
     end
-    post '/jackpot/create' do
+    post '/jackpots/create' do
         p(session[:user])
         if session[:user]["admin"] == 1
             p(params)
@@ -130,8 +131,9 @@ class App < Sinatra::Base
         end
         redirect('/slot')
     end
-    post '/jackpot/:id' do |id|
+    post '/jackpot_users' do
         if session[:user]
+            id = params["jackpot_id"].to_i
             jackpot = Jackpots.select_by_id(id)
             jackpot_users = JackpotUsers.select_by_ids(session[:user]["id"], id).first
             p(jackpot_users)
@@ -151,7 +153,7 @@ class App < Sinatra::Base
             redirect('/login')
         end
     end
-    get '/getjackpot' do
+    get '/jackpots' do
         content_type :json
         jackpot_list = [];
         jackpot_array = [];
@@ -174,7 +176,7 @@ class App < Sinatra::Base
         
         {success: true, message: "Jackpots fetched", jackpots: jackpot_array}.to_json
     end
-    get '/getodds' do
+    get '/stats' do
         content_type :json
         stats = Stats.index()
         stats_array = []
@@ -183,20 +185,20 @@ class App < Sinatra::Base
         end
         {success: true, message: "Stats fetched", stats: stats_array}.to_json
     end
-    post '/deposit' do
+    post '/users/update' do
         if session[:user]
             Users.update_balance(session[:user]["id"], session[:user]["balance"].to_i + params["depositAmount"].to_i)
         end
         redirect('/slot')
     end
-    post '/account/:id/delete' do |id|
+    post '/users/:id/delete' do |id|
         if session[:user]["id"] == id.to_i
             Users.delete(id)
             session[:user] = nil
         end
         redirect('/login')
     end
-    post '/jackpot/:id/delete' do |id|
+    post '/jackpots/:id/delete' do |id|
         if session[:user]["admin"] == 1
             jackpot = Jackpots.select_by_id(id)
             player_amount = JackpotUsers.select_by_jackpot_id(id).length
